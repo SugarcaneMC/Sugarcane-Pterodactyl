@@ -1,0 +1,41 @@
+{
+    "meta": {
+        "version": "PTDL_v1",
+        "update_url": null
+    },
+    "name": "Sugarcane",
+    "author": "chris@chrischromeyt.com",
+    "description": "",
+    "features": [
+        "eula"
+    ],
+    "images": [
+        "quay.io\/parkervcp\/pterodactyl-images:debian_openjdk-16"
+    ],
+    "file_denylist": [],
+    "startup": "java -jar SugarcaneUpdater.jar --branch {{BRANCH}} --updateSelf --sysjava --no-prealloc --mem {{SERVER_MEMORY}}M",
+    "config": {
+        "files": "{\r\n    \"server.properties\": {\r\n        \"parser\": \"properties\",\r\n        \"find\": {\r\n            \"server-ip\": \"0.0.0.0\",\r\n            \"enable-query\": \"true\",\r\n            \"server-port\": \"{{server.build.default.port}}\",\r\n            \"query.port\": \"{{server.build.default.port}}\"\r\n        }\r\n    }\r\n}",
+        "startup": "{\r\n    \"done\": \")! For help, type \",\r\n    \"userInteraction\": [\r\n        \"Go to eula.txt for more info.\"\r\n    ]\r\n}",
+        "logs": "{\r\n    \"custom\": false,\r\n    \"location\": \"logs\/latest.log\"\r\n}",
+        "stop": "stop"
+    },
+    "scripts": {
+        "installation": {
+            "script": "#!\/bin\/bash\n# Based off the Spigot Installation Script\n#\n# Server Files: \/mnt\/server\n\napt update\napt install -y curl wget git openssl bash bc apt-transport-https gnupg software-properties-common\nwget -qO - https:\/\/adoptopenjdk.jfrog.io\/adoptopenjdk\/api\/gpg\/key\/public | apt-key add -\nadd-apt-repository --yes https:\/\/adoptopenjdk.jfrog.io\/adoptopenjdk\/deb\/\napt update\nmkdir -p \/usr\/share\/man\/man1\napt install -y adoptopenjdk-16-hotspot\n\ncd \/mnt\/server\nwget http:\/\/ci.sugarcanemc.org\/job\/SugarcaneUpdater\/lastSuccessfulBuild\/artifact\/build\/libs\/SugarcaneUpdater.jar\njava -jar SugarcaneUpdater.jar --updateSelf --sysjava --branch ${BRANCH}",
+            "container": "debian:buster-slim",
+            "entrypoint": "bash"
+        }
+    },
+    "variables": [
+        {
+            "name": "Sugarcane Branch",
+            "description": "The branch to download from.",
+            "env_variable": "BRANCH",
+            "default_value": "1.17.1/dev",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string"
+        }
+    ]
+}
