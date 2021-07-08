@@ -1,7 +1,7 @@
 {
     "meta": {
         "version": "PTDL_v1",
-        "update_url": null
+        "update_url": "https://raw.githubusercontent.com/SugarcaneMC/Sugarcane-Pterodactyl/master/sugarcane-egg.json?token=AGYZC4DXIN656YDXRSYUEJTA45CPS"
     },
     "name": "Sugarcane",
     "author": "chris@chrischromeyt.com",
